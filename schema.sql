@@ -1,6 +1,9 @@
+DROP TABLE IF EXISTS invoice_items;
+DROP TABLE IF EXISTS invoices;
+
 CREATE TABLE invoices (
   id SERIAL PRIMARY KEY,
-  invoiceNumber VARCHAR(255) UNIQUE DEFAULT gen_random_uuid()::varchar,
+  invoiceNumber VARCHAR(255) UNIQUE NOT NULL,
   date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   customerName VARCHAR(255)
 );

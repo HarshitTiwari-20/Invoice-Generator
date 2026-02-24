@@ -6,10 +6,14 @@ export const formatCurrency = (amount: number) => {
     }).format(amount);
 };
 
+export const formatDate = (dateString: string | Date) => {
+    const d = new Date(dateString);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+};
+
 export const numberToWords = (num: number): string => {
-    // Simple implementation or placeholder - for a real app, use a library like 'n2words'
-    // For this demo, I'll return a placeholder or simple string concatenation if easy
-    // But given constraints, I'll recommend the user install 'n2words' or similar if they need exact Indian numbering.
-    // I will implement a very basic integer-to-words for demo.
     return num.toString() + " (Words logic placeholder)";
 };

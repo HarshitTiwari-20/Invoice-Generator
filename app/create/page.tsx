@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 export default function CreateInvoicePage() {
     const router = useRouter();
+    const [invoiceNumber, setInvoiceNumber] = useState('');
     const [customerName, setCustomerName] = useState('');
     const [items, setItems] = useState([
         { productName: '', quantity: 1, totalPrice: 0 }
@@ -36,7 +37,7 @@ export default function CreateInvoicePage() {
             const res = await fetch('/api/invoices', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ customerName, items }),
+                body: JSON.stringify({ invoiceNumber, customerName, items }),
             });
 
             if (res.ok) {
@@ -58,16 +59,29 @@ export default function CreateInvoicePage() {
                 <h1 className="text-2xl font-bold mb-6">Create New Invoice</h1>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Customer Name</label>
-                        <input
-                            type="text"
-                            className="w-full border p-2 rounded"
-                            value={customerName}
-                            onChange={(e) => setCustomerName(e.target.value)}
-                            required
-                            placeholder="Enter customer name"
-                        />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Invoice Number</label>
+                            <input
+                                type="text"
+                                className="w-full border p-2 rounded"
+                                value={invoiceNumber}
+                                onChange={(e) => setInvoiceNumber(e.target.value)}
+                                required
+                                placeholder="Enter invoice number"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Customer Name</label>
+                            <input
+                                type="text"
+                                className="w-full border p-2 rounded"
+                                value={customerName}
+                                onChange={(e) => setCustomerName(e.target.value)}
+                                required
+                                placeholder="Enter customer name"
+                            />
+                        </div>
                     </div>
 
                     <div className="space-y-4">

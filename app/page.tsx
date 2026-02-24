@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { useReactToPrint } from 'react-to-print';
 import InvoiceTemplate from '@/components/InvoiceTemplate';
 import { InvoiceWithItems } from '@/lib/types';
+import { formatDate } from '@/lib/utils';
 import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
 
 export default function Home() {
   const [invoices, setInvoices] = useState<InvoiceWithItems[]>([]);
@@ -88,7 +89,7 @@ export default function Home() {
                 >
                   <div className="flex justify-between">
                     <span className="font-bold">{inv.invoicenumber}</span>
-                    <span className="text-xs text-gray-500">{new Date(inv.date).toLocaleDateString()}</span>
+                    <span className="text-xs text-gray-500">{formatDate(inv.date)}</span>
                   </div>
                   <div className="text-sm text-gray-600 truncate">{inv.customername}</div>
                   <div className="font-semibold text-right mt-2">
@@ -103,7 +104,7 @@ export default function Home() {
           <div className="col-span-2 bg-gray-200 p-8 flex flex-col items-center justify-center rounded border overflow-auto h-[110vh]">
             {selectedInvoice ? (
               <div className="w-full flex flex-col items-center">
-                <div className="flex gap-4 mb-4">
+                <div className="flex gap-4 mb-4 ">
                   <button
                     onClick={() => handlePrint()}
                     className="bg-gray-800 text-white px-6 py-2 rounded shadow hover:bg-gray-900"
