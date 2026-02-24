@@ -103,8 +103,8 @@ export default function Home() {
           {/* Invoice Preview */}
           <div className="col-span-2 bg-gray-200 p-8 flex flex-col items-center justify-center rounded border overflow-auto h-[110vh]">
             {selectedInvoice ? (
-              <div className="w-full flex flex-col items-center">
-                <div className="flex gap-4 mb-4 ">
+              <div className="w-full flex flex-col items-center mt-100 lg:mt-10">
+                <div className="flex gap-4 mb-2">
                   <button
                     onClick={() => handlePrint()}
                     className="bg-gray-800 text-white px-6 py-2 rounded shadow hover:bg-gray-900"
