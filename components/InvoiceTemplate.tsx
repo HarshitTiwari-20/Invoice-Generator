@@ -89,6 +89,7 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                         <div className="flex border-b border-[#000000]">
                             <div className="w-1/2 p-1 border-r border-[#000000]">
                                 <p>Reference No. & Date.</p>
+                                <p className="font-bold">{invoice.id} {formatDate(invoice.date)}</p>
                             </div>
                             <div className="w-1/2 p-1">
                                 <p>Other References</p>
@@ -97,9 +98,11 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                         <div className="flex border-b border-[#000000]">
                             <div className="w-1/2 p-1 border-r border-[#000000]">
                                 <p>Buyer's Order No.</p>
+                                <p className="font-bold">VERBAL</p>
                             </div>
                             <div className="w-1/2 p-1">
                                 <p>Dated</p>
+                                <p className="font-bold">{formatDate(invoice.date)}</p>
                             </div>
                         </div>
                         <div className="flex border-b border-[#000000]">
@@ -114,9 +117,11 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                         <div className="flex border-b border-[#000000]">
                             <div className="w-1/2 p-1 border-r border-[#000000]">
                                 <p>Dispatched through</p>
+                                <p className="font-bold">BY ROAD</p>
                             </div>
                             <div className="w-1/2 p-1">
                                 <p>Destination</p>
+                                <p className="font-bold">235/4, G T ROAD, NORTH, GHUSURI</p>
                             </div>
                         </div>
                         <div className="flex border-b-2 border-[#000000]">

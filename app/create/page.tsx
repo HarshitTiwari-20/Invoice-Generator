@@ -85,7 +85,7 @@ export default function CreateInvoicePage() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Motor Vehicle No. (Optional)</label>
+                            <label className="block text-sm font-medium mb-1">Motor Vehicle No. </label>
                             <input
                                 type="text"
                                 className="w-full border p-2 rounded"
@@ -95,7 +95,7 @@ export default function CreateInvoicePage() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Dispatch Doc No. (Optional)</label>
+                            <label className="block text-sm font-medium mb-1">Dispatch Doc No. </label>
                             <input
                                 type="text"
                                 className="w-full border p-2 rounded"

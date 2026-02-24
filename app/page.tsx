@@ -108,7 +108,7 @@ export default function Home() {
           </div>
 
           {/* Invoice Preview */}
-          <div className="col-span-2 bg-gray-200 p-8 flex flex-col items-center justify-center rounded border overflow-auto h-[110vh]">
+          <div className="col-span-2 bg-gray-200 p-8 flex flex-col items-center justify-center rounded border overflow-auto h-[110vh] lg:w-[50vw] w-[180vw]">
             {selectedInvoice ? (
               <div className="w-full flex flex-col items-center lg:mt-250 mt-350">
                 <div className="flex gap-4 mt-400">
