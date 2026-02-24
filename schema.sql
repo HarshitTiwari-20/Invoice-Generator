@@ -5,7 +5,9 @@ CREATE TABLE invoices (
   id SERIAL PRIMARY KEY,
   invoiceNumber VARCHAR(255) UNIQUE NOT NULL,
   date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  customerName VARCHAR(255)
+  customerName VARCHAR(255),
+  motorVehicleNo VARCHAR(255),
+  dispatchDocNo VARCHAR(255)
 );
 
 CREATE TABLE invoice_items (

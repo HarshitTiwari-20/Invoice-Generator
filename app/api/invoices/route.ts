@@ -11,13 +11,15 @@ interface InvoiceItemInput {
 interface CreateInvoiceRequest {
     invoiceNumber: string;
     customerName?: string;
+    motorVehicleNo?: string;
+    dispatchDocNo?: string;
     items: InvoiceItemInput[];
 }
 
 export async function POST(req: NextRequest) {
     try {
         const body: CreateInvoiceRequest = await req.json();
-        const { invoiceNumber, customerName, items } = body;
+        const { invoiceNumber, customerName, motorVehicleNo, dispatchDocNo, items } = body;
 
         if (!invoiceNumber) {
             return NextResponse.json({ error: 'Invoice number is required' }, { status: 400 });
@@ -37,11 +39,16 @@ export async function POST(req: NextRequest) {
             await client.query('BEGIN');
 
             const insertInvoiceText = `
-                INSERT INTO invoices (invoiceNumber, customerName)
-                VALUES ($1, $2)
-                RETURNING id, invoiceNumber, date, customerName
+                INSERT INTO invoices (invoiceNumber, customerName, motorVehicleNo, dispatchDocNo)
+                VALUES ($1, $2, $3, $4)
+                RETURNING id, invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo
             `;
-            const invoiceRes = await client.query(insertInvoiceText, [invoiceNumber, customerName || 'Cash Customer']);
+            const invoiceRes = await client.query(insertInvoiceText, [
+                invoiceNumber,
+                customerName || 'Cash Customer',
+                motorVehicleNo || null,
+                dispatchDocNo || null
+            ]);
             const invoice = invoiceRes.rows[0];
 
             const insertItemText = `

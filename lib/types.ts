@@ -3,6 +3,8 @@ export interface Invoice {
     invoicenumber: string;
     date: Date;
     customername: string | null;
+    motorvehicleno: string | null;
+    dispatchdocno: string | null;
 }
 
 export interface InvoiceItem {

@@ -7,6 +7,8 @@ export default function CreateInvoicePage() {
     const router = useRouter();
     const [invoiceNumber, setInvoiceNumber] = useState('');
     const [customerName, setCustomerName] = useState('');
+    const [motorVehicleNo, setMotorVehicleNo] = useState('');
+    const [dispatchDocNo, setDispatchDocNo] = useState('');
     const [items, setItems] = useState([
         { productName: '', quantity: 1, totalPrice: 0 }
     ]);
@@ -37,7 +39,7 @@ export default function CreateInvoicePage() {
             const res = await fetch('/api/invoices', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ invoiceNumber, customerName, items }),
+                body: JSON.stringify({ invoiceNumber, customerName, motorVehicleNo, dispatchDocNo, items }),
             });
 
             if (res.ok) {
@@ -59,7 +61,7 @@ export default function CreateInvoicePage() {
                 <h1 className="text-2xl font-bold mb-6">Create New Invoice</h1>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 gap-y-6">
                         <div>
                             <label className="block text-sm font-medium mb-1">Invoice Number</label>
                             <input
@@ -80,6 +82,26 @@ export default function CreateInvoicePage() {
                                 onChange={(e) => setCustomerName(e.target.value)}
                                 required
                                 placeholder="Enter customer name"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Motor Vehicle No. (Optional)</label>
+                            <input
+                                type="text"
+                                className="w-full border p-2 rounded"
+                                value={motorVehicleNo}
+                                onChange={(e) => setMotorVehicleNo(e.target.value)}
+                                placeholder="Enter vehicle number"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Dispatch Doc No. (Optional)</label>
+                            <input
+                                type="text"
+                                className="w-full border p-2 rounded"
+                                value={dispatchDocNo}
+                                onChange={(e) => setDispatchDocNo(e.target.value)}
+                                placeholder="Enter dispatch document number"
                             />
                         </div>
                     </div>

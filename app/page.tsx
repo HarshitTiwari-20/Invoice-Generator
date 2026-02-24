@@ -23,31 +23,38 @@ export default function Home() {
     if (!input) return;
 
     try {
-      const canvas = await html2canvas(input, {
-        scale: 2, // Higher scale for better quality
-        useCORS: true,
-        logging: false,
-      });
-
-      const imgData = canvas.toDataURL('image/png');
-
-      // A4 dimensions in mm
       const pdf = new jsPDF({
         orientation: 'p',
         unit: 'mm',
         format: 'a4',
       });
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
+      const pages = input.querySelectorAll('.invoice-page');
+      if (pages.length === 0) return;
 
-      // Calculate ratio to fit width
-      const ratio = pdfWidth / imgWidth;
-      const imgHeightInPdf = imgHeight * ratio;
+      for (let i = 0; i < pages.length; i++) {
+        const pageNode = pages[i] as HTMLElement;
+        const canvas = await html2canvas(pageNode, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          windowWidth: pageNode.scrollWidth,
+          windowHeight: pageNode.scrollHeight,
+        });
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeightInPdf);
+        const imgData = canvas.toDataURL('image/png');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
+        const ratio = pdfWidth / imgWidth;
+        const imgHeightInPdf = imgHeight * ratio;
+
+        if (i > 0) {
+          pdf.addPage();
+        }
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeightInPdf);
+      }
+
       pdf.save(`invoice_${selectedInvoice?.invoicenumber || 'download'}.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -103,8 +110,8 @@ export default function Home() {
           {/* Invoice Preview */}
           <div className="col-span-2 bg-gray-200 p-8 flex flex-col items-center justify-center rounded border overflow-auto h-[110vh]">
             {selectedInvoice ? (
-              <div className="w-full flex flex-col items-center mt-100 lg:mt-10">
-                <div className="flex gap-4 mb-2">
+              <div className="w-full flex flex-col items-center lg:mt-250 mt-350">
+                <div className="flex gap-4 mt-400">
                   <button
                     onClick={() => handlePrint()}
                     className="bg-gray-800 text-white px-6 py-2 rounded shadow hover:bg-gray-900"
