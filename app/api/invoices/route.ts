@@ -1,16 +1,5 @@
-
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-// PrismaClient is instantiated once and reused across hot reloads in development
-// to prevent multiple instances being created.
-declare global {
-    var prisma: PrismaClient | undefined;
-}
-
-const prisma = global.prisma || new PrismaClient();
-
-if (process.env.NODE_ENV === 'development') global.prisma = prisma;
+import pool from '@/lib/db';
 
 // Data structure for the request body
 interface InvoiceItemInput {
@@ -37,38 +26,55 @@ export async function POST(req: NextRequest) {
         // GST Rate assumption: 18%
         const GST_RATE = 0.18;
 
-        const invoiceData = items.map((item) => {
-            // Calculate derived values
-            // total = taxable * (1 + rate)
-            // taxable = total / (1 + rate)
-            const taxableValue = item.totalPrice / (1 + GST_RATE);
-            const totalTax = item.totalPrice - taxableValue;
-            const cgst = totalTax / 2;
-            const sgst = totalTax / 2;
+        const client = await pool.connect();
 
-            return {
-                productName: item.productName,
-                quantity: item.quantity,
-                totalPrice: item.totalPrice,
-                taxableValue: parseFloat(taxableValue.toFixed(2)),
-                cgstAmount: parseFloat(cgst.toFixed(2)),
-                sgstAmount: parseFloat(sgst.toFixed(2)),
-            };
-        });
+        try {
+            await client.query('BEGIN');
 
-        const invoice = await prisma.invoice.create({
-            data: {
-                customerName: customerName || 'Cash Customer',
-                items: {
-                    create: invoiceData,
-                },
-            },
-            include: {
-                items: true,
-            },
-        });
+            const insertInvoiceText = `
+                INSERT INTO invoices (customerName)
+                VALUES ($1)
+                RETURNING id, invoiceNumber, date, customerName
+            `;
+            const invoiceRes = await client.query(insertInvoiceText, [customerName || 'Cash Customer']);
+            const invoice = invoiceRes.rows[0];
 
-        return NextResponse.json(invoice, { status: 201 });
+            const insertItemText = `
+                INSERT INTO invoice_items 
+                (productName, quantity, totalPrice, taxableValue, cgstAmount, sgstAmount, invoiceId)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                RETURNING *
+            `;
+
+            const createdItems = [];
+
+            for (const item of items) {
+                const taxableValue = item.totalPrice / (1 + GST_RATE);
+                const totalTax = item.totalPrice - taxableValue;
+                const cgst = totalTax / 2;
+                const sgst = totalTax / 2;
+
+                const itemRes = await client.query(insertItemText, [
+                    item.productName,
+                    item.quantity,
+                    item.totalPrice,
+                    parseFloat(taxableValue.toFixed(2)),
+                    parseFloat(cgst.toFixed(2)),
+                    parseFloat(sgst.toFixed(2)),
+                    invoice.id
+                ]);
+                createdItems.push(itemRes.rows[0]);
+            }
+
+            await client.query('COMMIT');
+
+            return NextResponse.json({ ...invoice, items: createdItems }, { status: 201 });
+        } catch (err) {
+            await client.query('ROLLBACK');
+            throw err;
+        } finally {
+            client.release();
+        }
     } catch (error) {
         console.error('Error creating invoice:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -77,14 +83,23 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
     try {
-        const invoices = await prisma.invoice.findMany({
-            include: {
-                items: true,
-            },
-            orderBy: {
-                date: 'desc',
-            },
-        });
+        // Fetch all invoices with their items
+        const invoicesQuery = `
+            SELECT i.*, 
+                   json_agg(ii.*) as items
+            FROM invoices i
+            LEFT JOIN invoice_items ii ON i.id = ii.invoiceId
+            GROUP BY i.id
+            ORDER BY i.date DESC
+        `;
+        const result = await pool.query(invoicesQuery);
+
+        // Ensure items array is empty instead of [null] when there are no items
+        const invoices = result.rows.map(row => ({
+            ...row,
+            items: row.items[0] === null ? [] : row.items
+        }));
+
         return NextResponse.json(invoices);
     } catch (error) {
         console.error('Error fetching invoices:', error);

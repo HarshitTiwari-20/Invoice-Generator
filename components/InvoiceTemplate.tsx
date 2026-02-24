@@ -1,17 +1,19 @@
 import React from 'react';
 import { formatCurrency } from '@/lib/utils';
-import { Invoice, InvoiceItem } from '@prisma/client';
+import { InvoiceWithItems, InvoiceItem } from '@/lib/types';
 
 interface InvoiceTemplateProps {
-    invoice: Invoice & { items: InvoiceItem[] };
+    invoice: InvoiceWithItems;
 }
 
 // Ensure strict printable styles
+
+
 const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateProps>(({ invoice }, ref) => {
-    const totalTaxable = invoice.items.reduce((sum: number, item: InvoiceItem) => sum + item.taxableValue, 0);
-    const totalCGST = invoice.items.reduce((sum: number, item: InvoiceItem) => sum + item.cgstAmount, 0);
-    const totalSGST = invoice.items.reduce((sum: number, item: InvoiceItem) => sum + item.sgstAmount, 0);
-    const totalAmount = invoice.items.reduce((sum: number, item: InvoiceItem) => sum + item.totalPrice, 0);
+    const totalTaxable = invoice.items.reduce((sum: number, item: InvoiceItem) => sum + item.taxablevalue, 0);
+    const totalCGST = invoice.items.reduce((sum: number, item: InvoiceItem) => sum + item.cgstamount, 0);
+    const totalSGST = invoice.items.reduce((sum: number, item: InvoiceItem) => sum + item.sgstamount, 0);
+    const totalAmount = invoice.items.reduce((sum: number, item: InvoiceItem) => sum + item.totalprice, 0);
 
     return (
         <div ref={ref} className="p-8 max-w-[210mm] mx-auto bg-white text-black text-xs font-sans border border-gray-300 print:border-none">
@@ -33,7 +35,7 @@ const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateProps>((
                         <div className="flex border-b border-black">
                             <div className="w-1/2 p-1 border-r border-black">
                                 <p className="font-bold">Invoice No.</p>
-                                <p>{invoice.invoiceNumber}</p>
+                                <p>{invoice.invoicenumber}</p>
                             </div>
                             <div className="w-1/2 p-1">
                                 <p className="font-bold">Dated</p>
@@ -71,12 +73,12 @@ const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateProps>((
                 <div className="flex border-b border-black">
                     <div className="w-1/2 p-2 border-r border-black">
                         <p className="font-bold">Consignee (Ship to)</p>
-                        <h2 className="font-bold text-sm uppercase">{invoice.customerName}</h2>
+                        <h2 className="font-bold text-sm uppercase">{invoice.customername}</h2>
                         <p>Address Placeholder...</p>
                     </div>
                     <div className="w-1/2 p-2">
                         <p className="font-bold">Buyer (Bill to)</p>
-                        <h2 className="font-bold text-sm uppercase">{invoice.customerName}</h2>
+                        <h2 className="font-bold text-sm uppercase">{invoice.customername}</h2>
                         <p>Address Placeholder...</p>
                     </div>
                 </div>
@@ -99,7 +101,7 @@ const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateProps>((
                             <tr key={index} className="align-top h-64">
                                 <td className="border-r border-black p-1 text-center">{index + 1}</td>
                                 <td className="border-r border-black p-1">
-                                    <span className="font-bold ">{item.productName}</span>
+                                    <span className="font-bold ">{item.productname}</span>
                                     <div className="mt-8 text-right pr-4">
                                         <p>CGST</p>
                                         <p>SGST</p>
@@ -110,14 +112,14 @@ const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateProps>((
                                     <span className="font-bold">{item.quantity.toFixed(3)} KG</span>
                                 </td>
                                 <td className="border-r border-black p-1 text-center">
-                                    {(item.taxableValue / item.quantity).toFixed(2)}
+                                    {(item.taxablevalue / item.quantity).toFixed(2)}
                                 </td>
                                 <td className="border-r border-black p-1 text-center">KG</td>
                                 <td className="p-1 text-right">
-                                    <span className="font-bold">{formatCurrency(item.taxableValue)}</span>
+                                    <span className="font-bold">{formatCurrency(item.taxablevalue)}</span>
                                     <div className="mt-8">
-                                        <p>{formatCurrency(item.cgstAmount)}</p>
-                                        <p>{formatCurrency(item.sgstAmount)}</p>
+                                        <p>{formatCurrency(item.cgstamount)}</p>
+                                        <p>{formatCurrency(item.sgstamount)}</p>
                                     </div>
                                 </td>
                             </tr>

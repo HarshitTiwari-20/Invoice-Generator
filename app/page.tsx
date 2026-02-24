@@ -4,13 +4,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useReactToPrint } from 'react-to-print';
 import InvoiceTemplate from '@/components/InvoiceTemplate';
-import { Invoice, InvoiceItem } from '@prisma/client';
+import { InvoiceWithItems } from '@/lib/types';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 export default function Home() {
-  const [invoices, setInvoices] = useState<(Invoice & { items: InvoiceItem[] })[]>([]);
-  const [selectedInvoice, setSelectedInvoice] = useState<(Invoice & { items: InvoiceItem[] }) | null>(null);
+  const [invoices, setInvoices] = useState<InvoiceWithItems[]>([]);
+  const [selectedInvoice, setSelectedInvoice] = useState<InvoiceWithItems | null>(null);
   const printRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useReactToPrint({
@@ -47,7 +47,7 @@ export default function Home() {
       const imgHeightInPdf = imgHeight * ratio;
 
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeightInPdf);
-      pdf.save(`invoice_${selectedInvoice?.invoiceNumber || 'download'}.pdf`);
+      pdf.save(`invoice_${selectedInvoice?.invoicenumber || 'download'}.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
       alert("Failed to generate PDF");
@@ -87,12 +87,12 @@ export default function Home() {
                   onClick={() => setSelectedInvoice(inv)}
                 >
                   <div className="flex justify-between">
-                    <span className="font-bold">{inv.invoiceNumber}</span>
+                    <span className="font-bold">{inv.invoicenumber}</span>
                     <span className="text-xs text-gray-500">{new Date(inv.date).toLocaleDateString()}</span>
                   </div>
-                  <div className="text-sm text-gray-600 truncate">{inv.customerName}</div>
+                  <div className="text-sm text-gray-600 truncate">{inv.customername}</div>
                   <div className="font-semibold text-right mt-2">
-                    ₹{inv.items.reduce((s, i) => s + i.totalPrice, 0).toFixed(2)}
+                    ₹{inv.items.reduce((s, i) => s + i.totalprice, 0).toFixed(2)}
                   </div>
                 </li>
               ))}

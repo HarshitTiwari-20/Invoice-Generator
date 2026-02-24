@@ -53,86 +53,88 @@ export default function CreateInvoicePage() {
     };
 
     return (
-        <div className="p-8 max-w-4xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6">Create New Invoice</h1>
+        <div className="min-h-screen bg-white text-black p-8">
+            <div className="max-w-4xl mx-auto">
+                <h1 className="text-2xl font-bold mb-6">Create New Invoice</h1>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                    <label className="block text-sm font-medium mb-1">Customer Name</label>
-                    <input
-                        type="text"
-                        className="w-full border p-2 rounded"
-                        value={customerName}
-                        onChange={(e) => setCustomerName(e.target.value)}
-                        required
-                        placeholder="Enter customer name"
-                    />
-                </div>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Customer Name</label>
+                        <input
+                            type="text"
+                            className="w-full border p-2 rounded"
+                            value={customerName}
+                            onChange={(e) => setCustomerName(e.target.value)}
+                            required
+                            placeholder="Enter customer name"
+                        />
+                    </div>
 
-                <div className="space-y-4">
-                    <label className="block text-sm font-medium">Items</label>
-                    {items.map((item, index) => (
-                        <div key={index} className="flex gap-4 items-end border p-4 rounded bg-gray-50 text-black">
-                            <div className="flex-1 ">
-                                <label className="block text-xs mb-1">Product Name</label>
-                                <input
-                                    type="text"
-                                    className="w-full border p-2 rounded"
-                                    value={item.productName}
-                                    onChange={(e) => handleChange(index, 'productName', e.target.value)}
-                                    required
-                                />
+                    <div className="space-y-4">
+                        <label className="block text-sm font-medium">Items</label>
+                        {items.map((item, index) => (
+                            <div key={index} className="flex gap-4 items-end border p-4 rounded bg-gray-50 text-black">
+                                <div className="flex-1 ">
+                                    <label className="block text-xs mb-1">Product Name</label>
+                                    <input
+                                        type="text"
+                                        className="w-full border p-2 rounded"
+                                        value={item.productName}
+                                        onChange={(e) => handleChange(index, 'productName', e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="w-32">
+                                    <label className="block text-xs mb-1">Quantity</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        className="w-full border p-2 rounded"
+                                        value={item.quantity}
+                                        onChange={(e) => handleChange(index, 'quantity', parseFloat(e.target.value))}
+                                        required
+                                    />
+                                </div>
+                                <div className="w-40">
+                                    <label className="block text-xs mb-1">Total Price (Inc. Tax)</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        className="w-full border p-2 rounded"
+                                        value={item.totalPrice}
+                                        onChange={(e) => handleChange(index, 'totalPrice', parseFloat(e.target.value))}
+                                        required
+                                    />
+                                </div>
+                                {items.length > 1 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveItem(index)}
+                                        className="text-red-500 hover:text-red-700 pb-2"
+                                    >
+                                        Remove
+                                    </button>
+                                )}
                             </div>
-                            <div className="w-32">
-                                <label className="block text-xs mb-1">Quantity</label>
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    className="w-full border p-2 rounded"
-                                    value={item.quantity}
-                                    onChange={(e) => handleChange(index, 'quantity', parseFloat(e.target.value))}
-                                    required
-                                />
-                            </div>
-                            <div className="w-40">
-                                <label className="block text-xs mb-1">Total Price (Inc. Tax)</label>
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    className="w-full border p-2 rounded"
-                                    value={item.totalPrice}
-                                    onChange={(e) => handleChange(index, 'totalPrice', parseFloat(e.target.value))}
-                                    required
-                                />
-                            </div>
-                            {items.length > 1 && (
-                                <button
-                                    type="button"
-                                    onClick={() => handleRemoveItem(index)}
-                                    className="text-red-500 hover:text-red-700 pb-2"
-                                >
-                                    Remove
-                                </button>
-                            )}
-                        </div>
-                    ))}
+                        ))}
+                        <button
+                            type="button"
+                            onClick={handleAddItem}
+                            className="text-blue-500 hover:text-blue-700 text-sm"
+                        >
+                            + Add Another Item
+                        </button>
+                    </div>
+
                     <button
-                        type="button"
-                        onClick={handleAddItem}
-                        className="text-blue-500 hover:text-blue-700 text-sm"
+                        type="submit"
+                        className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:opacity-50"
+                        disabled={loading}
                     >
-                        + Add Another Item
+                        {loading ? 'Generating...' : 'Generate Invoice'}
                     </button>
-                </div>
-
-                <button
-                    type="submit"
-                    className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:opacity-50"
-                    disabled={loading}
-                >
-                    {loading ? 'Generating...' : 'Generate Invoice'}
-                </button>
-            </form>
+                </form>
+            </div>
         </div>
     );
 }
