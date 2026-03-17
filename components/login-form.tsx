@@ -58,10 +58,10 @@ export function LoginForm({
     };
 
     return (
-        <div className={cn("flex flex-col gap-6 w-full max-w-[500px] m-auto text-black", className)} {...props}>
-            <Card>
+        <div className={cn("flex flex-col gap-6 w-full max-w-[500px] m-auto text-white", className)} {...props}>
+            <Card className="glass-card border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)] bg-white/5 pb-2">
                 <CardHeader>
-                    <CardTitle>Login to your account</CardTitle>
+                    <CardTitle className="text-2xl tracking-wide font-bold">Login to your account</CardTitle>
                     
                 </CardHeader>
                 <CardContent>
@@ -77,10 +77,11 @@ export function LoginForm({
                                     required
                                     value={formData.email}
                                     onChange={handleChange}
+                                    className="glass-input p-3 rounded-lg w-full transition"
                                 />
                             </Field>
                             <Field>
-                                <FieldLabel htmlFor="email">Password</FieldLabel>
+                                <FieldLabel htmlFor="password">Password</FieldLabel>
                                 <Input
                                     id="password"
                                     type="password"
@@ -88,10 +89,11 @@ export function LoginForm({
                                     value={formData.password}
                                     onChange={handleChange}
                                     placeholder="Password"
+                                    className="glass-input p-3 rounded-lg w-full transition"
                                 />
                             </Field>
-                            <Field>
-                                <Button className='bg-blue-600 hover:bg-blue-500 text-white' type="submit" disabled={loading}>
+                            <Field className="mt-4">
+                                <Button className='w-full bg-fuchsia-600/90 hover:bg-fuchsia-500 text-white py-3 rounded-xl hover:shadow-[0_0_15px_rgba(255,0,255,0.4)] transition font-bold text-base' type="submit" disabled={loading}>
                                     {loading ? 'Logging in...' : 'Login'}
                                 </Button>
                             </Field>

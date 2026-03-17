@@ -103,10 +103,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-10xl mx-auto">
+    <div className="min-h-screen premium-bg p-8">
+      <div className="max-w-10xl mx-auto relative z-10">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Invoice Manager</h1>
+          <h1 className="text-3xl font-bold text-white tracking-wide">Invoice Manager</h1>
           <div className="flex gap-4">
             <Link href="/create" className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700">
               Create New Invoice
@@ -119,22 +119,22 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Invoice List */}
-          <div className="bg-white p-6 rounded shadow col-span-1 h-[80vh] overflow-y-auto text-black">
-            <h2 className="text-xl font-semibold mb-4 text-black">Recent Invoices</h2>
-            {invoices.length === 0 && <p className="text-gray-900">No invoices found.</p>}
+          <div className="glass-card p-6 rounded-2xl col-span-1 h-[80vh] overflow-y-auto custom-scrollbar">
+            <h2 className="text-xl font-semibold mb-4 text-white">Recent Invoices</h2>
+            {invoices.length === 0 && <p className="text-gray-300">No invoices found.</p>}
             <ul className="space-y-4">
               {invoices.map((inv) => (
                 <li
                   key={inv.id}
-                  className={`border p-4 rounded cursor-pointer hover:bg-gray-200 ${selectedInvoice?.id === inv.id ? 'border-blue-500 bg-blue-50' : ''}`}
+                  className={`border border-white/10 p-4 rounded-xl cursor-pointer transition-all hover:bg-white/10 ${selectedInvoice?.id === inv.id ? 'bg-white/20 border-white/30 shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'bg-black/20'}`}
                   onClick={() => setSelectedInvoice(inv)}
                 >
                   <div className="flex justify-between">
-                    <span className="font-bold">{inv.invoicenumber}</span>
-                    <span className="text-xs text-gray-500">{formatDate(inv.date)}</span>
+                    <span className="font-bold text-white">{inv.invoicenumber}</span>
+                    <span className="text-xs text-gray-300">{formatDate(inv.date)}</span>
                   </div>
-                  <div className="text-sm text-gray-600 truncate">{inv.customername}</div>
-                  <div className="font-semibold text-right mt-2">
+                  <div className="text-sm text-gray-300 xl:truncate">{inv.customername}</div>
+                  <div className="font-semibold text-right mt-2 text-fuchsia-300">
                     ₹{inv.items.reduce((s, i) => s + i.totalprice, 0).toFixed(2)}
                   </div>
                 </li>
@@ -143,13 +143,13 @@ export default function Home() {
           </div>
 
           {/* Invoice Preview */}
-          <div className="col-span-2 bg-gray-200 p-8 flex flex-col items-center justify-center rounded border overflow-auto h-[115vh]  w-auto">
+          <div className="col-span-2 glass-card p-8 flex flex-col items-center justify-center rounded-2xl h-[240vh] w-auto overflow-auto relative">
             {selectedInvoice ? (
-              <div className="w-auto flex flex-col items-center lg:mt-250 mt-350">
-                <div className="flex gap-4 mt-400">
+              <div className="w-auto flex flex-col items-center lg:mt-250 mt-350 z-20 relative">
+                <div className="flex gap-4 mt-[400px]">
                   <button
                     onClick={() => handlePrint()}
-                    className="bg-gray-800 text-white px-6 py-2 rounded shadow hover:bg-gray-900"
+                    className="bg-white/10 border border-white/20 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-white/20 backdrop-blur-sm transition"
                   >
                     Print
                   </button>
@@ -167,18 +167,18 @@ export default function Home() {
                   </Link>
                   <button
                     onClick={() => handleDelete(selectedInvoice.id)}
-                    className="bg-red-600 text-white px-6 py-2 rounded shadow hover:bg-red-700"
+                    className="bg-red-500/80 border border-red-500/50 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-red-600/80 backdrop-blur-sm transition"
                   >
                     Delete
                   </button>
                 </div>
-                <div className="scale-125 origin-top shadow-lg">
+                <div className="scale-125 origin-top shadow-2xl rounded mt-8">
                   {/* Render the template for viewing */}
                   <InvoiceTemplate ref={printRef} invoice={selectedInvoice} />
                 </div>
               </div>
             ) : (
-              <div className="text-gray-500 text-lg">Select an invoice to preview</div>
+              <div className="text-white/70 text-lg flex items-center justify-center h-full">Select an invoice to preview</div>
             )}
           </div>
         </div>

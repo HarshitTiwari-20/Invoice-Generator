@@ -105,7 +105,7 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                         <div className="flex border-b border-[#000000]">
                             <div className="w-1/2 p-1 border-r border-[#000000]">
                                 <p>Reference No. & Date.</p>
-                                <p className="font-bold">{invoice.id} {formatDate(invoice.date)}</p>
+                                {/* <p className="font-bold">{invoice.id} {formatDate(invoice.date)}</p> */}
                             </div>
                             <div className="w-1/2 p-1">
                                 <p>Other References</p>

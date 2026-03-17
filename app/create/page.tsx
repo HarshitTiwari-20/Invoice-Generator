@@ -59,9 +59,9 @@ export default function CreateInvoicePage() {
 
     
     return (
-        <div className="min-h-screen bg-white text-black p-8">
-            <div className="max-w-auto mx-auto">
-                <h1 className="text-4xl font-bold mb-6 underline">Create New Invoice</h1>
+        <div className="min-h-screen premium-bg p-8 flex justify-center items-start">
+            <div className="w-full max-w-4xl glass-card p-8 md:p-12 rounded-2xl shadow-2xl relative z-10">
+                <h1 className="text-4xl font-bold mb-8 text-white tracking-wide">Create New Invoice</h1>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-2 gap-4 gap-y-6">
@@ -69,7 +69,7 @@ export default function CreateInvoicePage() {
                             <label className="block text-2xl font-medium mb-1">Invoice Number</label>
                             <input
                                 type="text"
-                                className="w-full border p-2 rounded"
+                                className="w-full glass-input p-3 rounded-lg transition"
                                 value={invoiceNumber}
                                 onChange={(e) => setInvoiceNumber(e.target.value)}
                                 required
@@ -80,7 +80,7 @@ export default function CreateInvoicePage() {
                             <label className="block text-2xl font-medium mb-1">Customer Name</label>
                             <input
                                 type="text"
-                                className="w-full border p-2 rounded"
+                                className="w-full glass-input p-3 rounded-lg transition"
                                 value={customerName}
                                 onChange={(e) => setCustomerName(e.target.value)}
                                 required
@@ -91,7 +91,7 @@ export default function CreateInvoicePage() {
                             <label className="block text-2xl font-medium mb-1">Motor Vehicle No. </label>
                             <input
                                 type="text"
-                                className="w-full border p-2 rounded"
+                                className="w-full glass-input p-3 rounded-lg transition"
                                 value={motorVehicleNo}
                                 onChange={(e) => setMotorVehicleNo(e.target.value)}
                                 placeholder="Enter vehicle number"
@@ -101,7 +101,7 @@ export default function CreateInvoicePage() {
                             <label className="block text-2xl font-medium mb-1">Dispatch Doc No. </label>
                             <input
                                 type="text"
-                                className="w-full border p-2 rounded"
+                                className="w-full glass-input p-3 rounded-lg transition"
                                 value={dispatchDocNo}
                                 onChange={(e) => setDispatchDocNo(e.target.value)}
                                 placeholder="Enter dispatch document number"
@@ -111,7 +111,7 @@ export default function CreateInvoicePage() {
                             <label className="block text-2xl font-medium mb-1">e-Way Bill No.</label>
                             <input
                                 type="text"
-                                className="w-full border p-2 rounded"
+                                className="w-full glass-input p-3 rounded-lg transition"
                                 value={ewayBillNo}
                                 onChange={(e) => setEwayBillNo(e.target.value)}
                                 placeholder="Enter e-Way Bill No. (Optional)"
@@ -120,7 +120,7 @@ export default function CreateInvoicePage() {
                         <div className="col-span-2">
                             <label className="block text-2xl font-medium mb-2">Consignee Details (Ship To)</label>
                             <textarea
-                                className="w-full border p-2 rounded h-50"
+                                className="w-full glass-input p-3 rounded-lg h-50 transition"
                                 value={consigneeDetails}
                                 onChange={(e) => setConsigneeDetails(e.target.value)}
                                 placeholder={`e.g.\n235/4, G T ROAD, NORTH, GHUSURI, Howrah,\nWest Bengal, 711107\nGSTIN/UIN : 19ALRPS1105Q1ZD\nState Name : West Bengal, Code : 19`}
@@ -131,12 +131,12 @@ export default function CreateInvoicePage() {
                     <div className="space-y-4">
                         <label className="block text-2xl font-medium">Items</label>
                         {items.map((item, index) => (
-                            <div key={index} className="flex gap-4 items-end border p-4 rounded bg-gray-50 text-black">
+                            <div key={index} className="flex flex-wrap md:flex-nowrap gap-4 items-end bg-white/5 border border-white/10 p-5 rounded-xl text-white">
                                 <div className="flex-1 ">
                                     <label className="block text-xl mb-1">Product Name</label>
                                     <input
                                         type="text"
-                                        className="w-full border p-2 rounded"
+                                        className="w-full glass-input p-3 rounded-lg transition"
                                         value={item.productName}
                                         onChange={(e) => handleChange(index, 'productName', e.target.value)}
                                         required
@@ -146,7 +146,7 @@ export default function CreateInvoicePage() {
                                     <label className="block text-xl mb-1">HSN/SAC</label>
                                     <input
                                         type="text"
-                                        className="w-full border p-2 rounded"
+                                        className="w-full glass-input p-3 rounded-lg transition"
                                         value={item.hsnSac || ''}
                                         onChange={(e) => handleChange(index, 'hsnSac', e.target.value)}
                                     />
@@ -156,7 +156,7 @@ export default function CreateInvoicePage() {
                                     <input
                                         type="number"
                                         step="0.01"
-                                        className="w-full border p-2 rounded"
+                                        className="w-full glass-input p-3 rounded-lg transition"
                                         value={item.quantity}
                                         onChange={(e) => handleChange(index, 'quantity', parseFloat(e.target.value))}
                                         required
@@ -167,7 +167,7 @@ export default function CreateInvoicePage() {
                                     <input
                                         type="number"
                                         step="0.01"
-                                        className="w-full border p-2 rounded"
+                                        className="w-full glass-input p-3 rounded-lg transition"
                                         value={item.totalPrice}
                                         onChange={(e) => handleChange(index, 'totalPrice', parseFloat(e.target.value))}
                                         required
@@ -187,7 +187,7 @@ export default function CreateInvoicePage() {
                         <button
                             type="button"
                             onClick={handleAddItem}
-                            className="text-blue-500 hover:text-blue-700 text-sm"
+                            className="text-fuchsia-300 hover:text-fuchsia-200 text-sm font-semibold transition"
                         >
                             + Add Another Item
                         </button>
@@ -195,7 +195,7 @@ export default function CreateInvoicePage() {
 
                     <button
                         type="submit"
-                        className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:opacity-50"
+                        className="bg-fuchsia-600/90 hover:bg-fuchsia-500 text-white px-8 py-3 rounded-xl hover:shadow-[0_0_20px_rgba(255,0,255,0.4)] transition w-full md:w-auto font-bold text-lg disabled:opacity-50"
                         disabled={loading}
                     >
                         {loading ? 'Generating...' : 'Generate Invoice'}
