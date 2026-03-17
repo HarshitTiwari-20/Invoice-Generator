@@ -13,6 +13,7 @@ export interface Invoice {
 export interface InvoiceItem {
     id: number;
     productname: string;
+    hsnsac?: string;
     quantity: number;
     totalprice: number;
     taxablevalue: number;

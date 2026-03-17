@@ -15,7 +15,7 @@ export default function EditInvoicePage() {
     const [ewayBillNo, setEwayBillNo] = useState('');
     const [consigneeDetails, setConsigneeDetails] = useState('');
     const [items, setItems] = useState([
-        { productName: '', quantity: 1, totalPrice: 0 }
+        { productName: '', hsnSac: '', quantity: 1, totalPrice: 0 }
     ]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -36,8 +36,9 @@ export default function EditInvoicePage() {
                     setConsigneeDetails(data.consigneedetails || '');
                     
                     if (data.items && data.items.length > 0) {
-                        setItems(data.items.map((i: { productname: string; quantity: number; totalprice: number }) => ({
+                        setItems(data.items.map((i: { productname: string; hsnsac: string; quantity: number; totalprice: number }) => ({
                             productName: i.productname,
+                            hsnSac: i.hsnsac || '',
                             quantity: i.quantity,
                             totalPrice: i.totalprice
                         })));
@@ -58,7 +59,7 @@ export default function EditInvoicePage() {
     }, [id, router]);
 
     const handleAddItem = () => {
-        setItems([...items, { productName: '', quantity: 1, totalPrice: 0 }]);
+        setItems([...items, { productName: '', hsnSac: '', quantity: 1, totalPrice: 0 }]);
     };
 
     const handleRemoveItem = (index: number) => {
@@ -191,6 +192,15 @@ export default function EditInvoicePage() {
                                         value={item.productName}
                                         onChange={(e) => handleChange(index, 'productName', e.target.value)}
                                         required
+                                    />
+                                </div>
+                                <div className="w-24">
+                                    <label className="block text-xs mb-1">HSN/SAC</label>
+                                    <input
+                                        type="text"
+                                        className="w-full border p-2 rounded"
+                                        value={item.hsnSac || ''}
+                                        onChange={(e) => handleChange(index, 'hsnSac', e.target.value)}
                                     />
                                 </div>
                                 <div className="w-32">

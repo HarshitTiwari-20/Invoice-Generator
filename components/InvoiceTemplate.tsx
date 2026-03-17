@@ -179,7 +179,7 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                                     <div className="text-right italic font-bold pr-16 mb-8">ROUNDED OFF(+/-)</div>
                                     {/* Optional Bill details block from screenshot */}
                                 </td>
-                                <td className="border-r border-[#000000] p-1 text-center">392111</td>
+                                <td className="border-r border-[#000000] p-1 text-center">{item.hsnsac || ''}</td>
                                 <td className="border-r border-[#000000] p-1 text-right font-bold">
                                     {item.quantity.toFixed(3)} KG
                                 </td>
@@ -237,7 +237,7 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                         </thead>
                         <tbody>
                             <tr>
-                                <td className="border-r border-[#000000] text-left p-1">392111</td>
+                                <td className="border-r border-[#000000] text-left p-1">{Array.from(new Set(invoice.items.map((i: InvoiceItem) => i.hsnsac).filter(Boolean))).join(', ')}</td>
                                 <td className="border-r border-[#000000] text-right p-1">{formatCurrency(totalTaxable).replace('₹', '')}</td>
                                 <td className="border-r border-[#000000] p-1">9%</td>
                                 <td className="border-r border-[#000000] text-right p-1">{formatCurrency(totalCGST).replace('₹', '')}</td>

@@ -12,12 +12,12 @@ export default function CreateInvoicePage() {
     const [ewayBillNo, setEwayBillNo] = useState('');
     const [consigneeDetails, setConsigneeDetails] = useState('');
     const [items, setItems] = useState([
-        { productName: '', quantity: 1, totalPrice: 0 }
+        { productName: '', hsnSac: '', quantity: 1, totalPrice: 0 }
     ]);
     const [loading, setLoading] = useState(false);
 
     const handleAddItem = () => {
-        setItems([...items, { productName: '', quantity: 1, totalPrice: 0 }]);
+        setItems([...items, { productName: '', hsnSac: '', quantity: 1, totalPrice: 0 }]);
     };
 
     const handleRemoveItem = (index: number) => {
@@ -140,6 +140,15 @@ export default function CreateInvoicePage() {
                                         value={item.productName}
                                         onChange={(e) => handleChange(index, 'productName', e.target.value)}
                                         required
+                                    />
+                                </div>
+                                <div className="w-32">
+                                    <label className="block text-xl mb-1">HSN/SAC</label>
+                                    <input
+                                        type="text"
+                                        className="w-full border p-2 rounded"
+                                        value={item.hsnSac || ''}
+                                        onChange={(e) => handleChange(index, 'hsnSac', e.target.value)}
                                     />
                                 </div>
                                 <div className="w-32">

@@ -4,6 +4,7 @@ import pool from '@/lib/db';
 // Data structure for the request body
 interface InvoiceItemInput {
     productName: string;
+    hsnsac?: string;
     quantity: number;
     totalPrice: number; // Inclusive of Tax
 }
@@ -57,8 +58,8 @@ export async function POST(req: NextRequest) {
 
             const insertItemText = `
                 INSERT INTO invoice_items 
-                (productName, quantity, totalPrice, taxableValue, cgstAmount, sgstAmount, invoiceId)
-                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                (productName, hsnsac, quantity, totalPrice, taxableValue, cgstAmount, sgstAmount, invoiceId)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
                 RETURNING *
             `;
 
@@ -72,6 +73,7 @@ export async function POST(req: NextRequest) {
 
                 const itemRes = await client.query(insertItemText, [
                     item.productName,
+                    item.hsnsac || null,
                     item.quantity,
                     item.totalPrice,
                     parseFloat(taxableValue.toFixed(2)),
