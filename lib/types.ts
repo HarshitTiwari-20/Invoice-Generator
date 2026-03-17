@@ -5,6 +5,9 @@ export interface Invoice {
     customername: string | null;
     motorvehicleno: string | null;
     dispatchdocno: string | null;
+    consigneedetails: string | null;
+    ewaybillno: string | null;
+    is_deleted: boolean;
 }
 
 export interface InvoiceItem {

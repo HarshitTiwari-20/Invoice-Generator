@@ -13,13 +13,15 @@ interface CreateInvoiceRequest {
     customerName?: string;
     motorVehicleNo?: string;
     dispatchDocNo?: string;
+    consigneeDetails?: string;
+    ewayBillNo?: string;
     items: InvoiceItemInput[];
 }
 
 export async function POST(req: NextRequest) {
     try {
         const body: CreateInvoiceRequest = await req.json();
-        const { invoiceNumber, customerName, motorVehicleNo, dispatchDocNo, items } = body;
+        const { invoiceNumber, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, ewayBillNo, items } = body;
 
         if (!invoiceNumber) {
             return NextResponse.json({ error: 'Invoice number is required' }, { status: 400 });
@@ -39,15 +41,17 @@ export async function POST(req: NextRequest) {
             await client.query('BEGIN');
 
             const insertInvoiceText = `
-                INSERT INTO invoices (invoiceNumber, customerName, motorVehicleNo, dispatchDocNo)
-                VALUES ($1, $2, $3, $4)
-                RETURNING id, invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo
+                INSERT INTO invoices (invoiceNumber, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, ewayBillNo, is_deleted)
+                VALUES ($1, $2, $3, $4, $5, $6, false)
+                RETURNING id, invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, ewayBillNo, is_deleted
             `;
             const invoiceRes = await client.query(insertInvoiceText, [
                 invoiceNumber,
                 customerName || 'Cash Customer',
                 motorVehicleNo || null,
-                dispatchDocNo || null
+                dispatchDocNo || null,
+                consigneeDetails || null,
+                ewayBillNo || null
             ]);
             const invoice = invoiceRes.rows[0];
 
@@ -101,6 +105,7 @@ export async function GET() {
                    json_agg(ii.*) as items
             FROM invoices i
             LEFT JOIN invoice_items ii ON i.id = ii.invoiceId
+            WHERE i.is_deleted = false OR i.is_deleted IS NULL
             GROUP BY i.id
             ORDER BY i.date DESC
         `;

@@ -1,8 +1,6 @@
 /* eslint-disable */
 require('dotenv').config();
 const { Client } = require('pg');
-const fs = require('fs');
-const path = require('path');
 
 const client = new Client({
     connectionString: process.env.DATABASE_URL
@@ -11,10 +9,15 @@ const client = new Client({
 async function migrate() {
     try {
         await client.connect();
-        const schema = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
-        console.log('Applying schema...');
-        await client.query(schema);
-        console.log('Schema applied successfully.');
+        console.log('Applying migration...');
+        
+        await client.query(`
+            ALTER TABLE invoices 
+            ADD COLUMN IF NOT EXISTS consigneeDetails TEXT,
+            ADD COLUMN IF NOT EXISTS is_deleted BOOLEAN DEFAULT false;
+        `);
+        
+        console.log('Migration applied successfully.');
     } catch (err) {
         console.error('Migration failed', err);
     } finally {

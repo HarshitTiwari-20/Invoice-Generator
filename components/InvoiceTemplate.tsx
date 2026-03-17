@@ -47,19 +47,34 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                         <div className="border-t-2 border-[#000000] p-1 flex-1">
                             <p>Consignee (Ship to)</p>
                             <h2 className="font-bold text-sm">{invoice.customername}</h2>
-                            <p>235/4, G T ROAD, NORTH, GHUSURI, Howrah,</p>
-                            <p>West Bengal, 711107</p>
-                            <p>GSTIN/UIN : 19ALRPS1105Q1ZD</p>
-                            <p>State Name : West Bengal, Code : 19</p>
+                            {invoice.consigneedetails ? (
+                                invoice.consigneedetails.split('\n').map((line, idx) => (
+                                    <p key={idx}>{line}</p>
+                                ))
+                            ) : (
+                                <>
+                                    <p>235/4, G T ROAD, NORTH, GHUSURI, Howrah,</p>
+                                    <p>West Bengal, 711107</p>
+                                    <p>GSTIN/UIN : 19ALRPS1105Q1ZD</p>
+                                    <p>State Name : West Bengal, Code : 19</p>
+                                </>
+                            )}
                         </div>
                         <div className="border-t-2 border-[#000000] p-1 flex-1">
                             <p>Buyer (Bill to)</p>
                             <h2 className="font-bold text-sm">{invoice.customername}</h2>
-                            <p>235/4, G T ROAD, NORTH, GHUSURI, Howrah,</p>
-                            <p>West Bengal, 711107</p>
-                            <p>GSTIN/UIN : 19ALRPS1105Q1ZD</p>
-                            <p>State Name : West Bengal, Code : 19</p>
-                            <p>Place of Supply : West Bengal</p>
+                            {invoice.consigneedetails ? (
+                                invoice.consigneedetails.split('\n').map((line, idx) => (
+                                    <p key={idx}>{line}</p>
+                                ))
+                            ) : (
+                                <>
+                                    <p>235/4, G T ROAD, NORTH, GHUSURI, Howrah,</p>
+                                    <p>West Bengal, 711107</p>
+                                    <p>GSTIN/UIN : 19ALRPS1105Q1ZD</p>
+                                    <p>State Name : West Bengal, Code : 19</p>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -72,6 +87,7 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                             </div>
                             <div className="w-1/3 p-1 border-r border-[#000000]">
                                 <p>e-Way Bill No.</p>
+                                <p className="font-bold">{invoice.ewaybillno}</p>
                             </div>
                             <div className="w-1/3 p-1">
                                 <p>Dated</p>
@@ -97,7 +113,7 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                         </div>
                         <div className="flex border-b border-[#000000]">
                             <div className="w-1/2 p-1 border-r border-[#000000]">
-                                <p>Buyer's Order No.</p>
+                                <p>Buyer&apos;s Order No.</p>
                                 <p className="font-bold">VERBAL</p>
                             </div>
                             <div className="w-1/2 p-1">
@@ -260,10 +276,10 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                             <table className="text-xs">
                                 <tbody>
                                     <tr>
-                                        <td colSpan={2} className="pb-1">Company's Bank Details</td>
+                                        <td colSpan={2} className="pb-1">Company&apos;s Bank Details</td>
                                     </tr>
                                     <tr>
-                                        <td className="pr-2 w-28">A/c Holder's Name</td>
+                                        <td className="pr-2 w-28">A/c Holder&apos;s Name</td>
                                         <td>: <span className="font-bold">S.S.ENTERPRISE</span></td>
                                     </tr>
                                     <tr>
@@ -303,5 +319,6 @@ const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateProps>((
         </div>
     );
 });
+InvoiceTemplate.displayName = 'InvoiceTemplate';
 
 export default InvoiceTemplate;

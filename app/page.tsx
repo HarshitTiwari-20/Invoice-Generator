@@ -9,7 +9,10 @@ import { formatDate } from '@/lib/utils';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
+  const router = useRouter();
   const [invoices, setInvoices] = useState<InvoiceWithItems[]>([]);
   const [selectedInvoice, setSelectedInvoice] = useState<InvoiceWithItems | null>(null);
   const printRef = useRef<HTMLDivElement>(null);
@@ -72,14 +75,46 @@ export default function Home() {
       .catch(err => console.error(err));
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/login');
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this invoice?')) return;
+    try {
+      const res = await fetch(`/api/invoices/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setInvoices(invoices.filter(inv => inv.id !== id));
+        if (selectedInvoice?.id === id) {
+          setSelectedInvoice(null);
+        }
+      } else {
+        alert('Failed to delete invoice');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error deleting invoice');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-10xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Tally Copy - Invoice Manager</h1>
-          <Link href="/create" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Create New Invoice
-          </Link>
+          <h1 className="text-3xl font-bold text-gray-800">Invoice Manager</h1>
+          <div className="flex gap-4">
+            <Link href="/create" className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700">
+              Create New Invoice
+            </Link>
+            <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700">
+              Logout
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -108,9 +143,9 @@ export default function Home() {
           </div>
 
           {/* Invoice Preview */}
-          <div className="col-span-2 bg-gray-200 p-8 flex flex-col items-center justify-center rounded border overflow-auto h-[110vh] lg:w-[50vw] w-[180vw]">
+          <div className="col-span-2 bg-gray-200 p-8 flex flex-col items-center justify-center rounded border overflow-auto h-[115vh]  w-auto">
             {selectedInvoice ? (
-              <div className="w-full flex flex-col items-center lg:mt-250 mt-350">
+              <div className="w-auto flex flex-col items-center lg:mt-250 mt-350">
                 <div className="flex gap-4 mt-400">
                   <button
                     onClick={() => handlePrint()}
@@ -124,8 +159,20 @@ export default function Home() {
                   >
                     Download PDF
                   </button>
+                  <Link
+                    href={`/edit/${selectedInvoice.id}`}
+                    className="bg-yellow-500 text-white px-6 py-2 rounded shadow hover:bg-yellow-600"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(selectedInvoice.id)}
+                    className="bg-red-600 text-white px-6 py-2 rounded shadow hover:bg-red-700"
+                  >
+                    Delete
+                  </button>
                 </div>
-                <div className="scale-75 origin-top shadow-lg">
+                <div className="scale-125 origin-top shadow-lg">
                   {/* Render the template for viewing */}
                   <InvoiceTemplate ref={printRef} invoice={selectedInvoice} />
                 </div>
