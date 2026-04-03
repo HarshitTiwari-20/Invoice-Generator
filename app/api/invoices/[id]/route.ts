@@ -103,7 +103,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
                 const sgst = totalTax / 2;
 
                 const itemRes = await client.query(insertItemText, [
-                    item.productName, item.hsnsac || null, item.quantity, item.totalPrice,
+                    item.productName, item.hsnsac || item.hsnSac || null, item.quantity, item.totalPrice,
                     parseFloat(taxableValue.toFixed(2)), parseFloat(cgst.toFixed(2)), 
                     parseFloat(sgst.toFixed(2)), id
                 ]);

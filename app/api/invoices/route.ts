@@ -5,6 +5,7 @@ import pool from '@/lib/db';
 interface InvoiceItemInput {
     productName: string;
     hsnsac?: string;
+    hsnSac?: string;
     quantity: number;
     totalPrice: number; // Inclusive of Tax
 }
@@ -73,7 +74,7 @@ export async function POST(req: NextRequest) {
 
                 const itemRes = await client.query(insertItemText, [
                     item.productName,
-                    item.hsnsac || null,
+                    item.hsnsac || item.hsnSac || null,
                     item.quantity,
                     item.totalPrice,
                     parseFloat(taxableValue.toFixed(2)),

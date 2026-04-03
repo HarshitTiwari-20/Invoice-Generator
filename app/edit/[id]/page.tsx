@@ -19,6 +19,32 @@ export default function EditInvoicePage() {
     ]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [lastAutoFilled, setLastAutoFilled] = useState<string | null>(null);
+
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            if (customerName.trim().length >= 2) {
+                try {
+                    const res = await fetch(`/api/customers?name=${encodeURIComponent(customerName.trim())}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.consigneeDetails) {
+                            setConsigneeDetails((prev) => {
+                                if (!prev || prev === lastAutoFilled) {
+                                    setLastAutoFilled(data.consigneeDetails);
+                                    return data.consigneeDetails;
+                                }
+                                return prev;
+                            });
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error fetching customer details", err);
+                }
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [customerName, lastAutoFilled]);
 
     useEffect(() => {
         if (!id) return;

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function CreateInvoicePage() {
@@ -15,6 +15,32 @@ export default function CreateInvoicePage() {
         { productName: '', hsnSac: '', quantity: 1, totalPrice: 0 }
     ]);
     const [loading, setLoading] = useState(false);
+    const [lastAutoFilled, setLastAutoFilled] = useState<string | null>(null);
+
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            if (customerName.trim().length >= 2) {
+                try {
+                    const res = await fetch(`/api/customers?name=${encodeURIComponent(customerName.trim())}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.consigneeDetails) {
+                            setConsigneeDetails((prev) => {
+                                if (!prev || prev === lastAutoFilled) {
+                                    setLastAutoFilled(data.consigneeDetails);
+                                    return data.consigneeDetails;
+                                }
+                                return prev;
+                            });
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error fetching customer details", err);
+                }
+            }
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, [customerName, lastAutoFilled]);
 
     const handleAddItem = () => {
         setItems([...items, { productName: '', hsnSac: '', quantity: 1, totalPrice: 0 }]);

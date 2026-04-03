@@ -7,12 +7,16 @@ CREATE TABLE invoices (
   date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   customerName VARCHAR(255),
   motorVehicleNo VARCHAR(255),
-  dispatchDocNo VARCHAR(255)
+  dispatchDocNo VARCHAR(255),
+  consigneeDetails TEXT,
+  ewayBillNo TEXT,
+  is_deleted BOOLEAN DEFAULT false
 );
 
 CREATE TABLE invoice_items (
   id SERIAL PRIMARY KEY,
   productName VARCHAR(255) NOT NULL,
+  hsnsac VARCHAR(255),
   quantity FLOAT NOT NULL,
   totalPrice FLOAT NOT NULL,
   taxableValue FLOAT NOT NULL,
