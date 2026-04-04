@@ -16,10 +16,9 @@ export const formatCurrency = (amount: number) => {
 export const formatDate = (dateString: string | Date) => {
     const d = new Date(dateString);
     const day = String(d.getDate()).padStart(2, '0');
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = monthNames[d.getMonth()];
-    const year = String(d.getFullYear()).slice(-2);
-    return `${day}-${month}-${year}`;
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = String(d.getFullYear());
+    return `${day}/${month}/${year}`;
 };
 
 export const numberToWords = (num: number): string => {

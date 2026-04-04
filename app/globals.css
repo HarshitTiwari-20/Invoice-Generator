@@ -67,6 +67,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   backdrop-filter: blur(8px);
+  color-scheme: white;
+}
+.glass-input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }
 .glass-input:focus {
   outline: none;

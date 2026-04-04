@@ -12,10 +12,13 @@ interface InvoiceItemInput {
 
 interface CreateInvoiceRequest {
     invoiceNumber: string;
+    date?: string;
     customerName?: string;
     motorVehicleNo?: string;
     dispatchDocNo?: string;
     consigneeDetails?: string;
+    destination?: string;
+    dispatchThrough?: string;
     ewayBillNo?: string;
     items: InvoiceItemInput[];
 }
@@ -23,7 +26,7 @@ interface CreateInvoiceRequest {
 export async function POST(req: NextRequest) {
     try {
         const body: CreateInvoiceRequest = await req.json();
-        const { invoiceNumber, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, ewayBillNo, items } = body;
+        const { invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, destination, dispatchThrough, ewayBillNo, items } = body;
 
         if (!invoiceNumber) {
             return NextResponse.json({ error: 'Invoice number is required' }, { status: 400 });
@@ -42,17 +45,22 @@ export async function POST(req: NextRequest) {
         try {
             await client.query('BEGIN');
 
+            const invoiceDate = date ? new Date(date) : new Date();
+
             const insertInvoiceText = `
-                INSERT INTO invoices (invoiceNumber, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, ewayBillNo, is_deleted)
-                VALUES ($1, $2, $3, $4, $5, $6, false)
-                RETURNING id, invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, ewayBillNo, is_deleted
+                INSERT INTO invoices (invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, destination,dispatchThrough, ewayBillNo, is_deleted)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, false)
+                RETURNING id, invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, destination, dispatchThrough, ewayBillNo, is_deleted
             `;
             const invoiceRes = await client.query(insertInvoiceText, [
                 invoiceNumber,
+                invoiceDate,
                 customerName || 'Cash Customer',
                 motorVehicleNo || null,
                 dispatchDocNo || null,
                 consigneeDetails || null,
+                destination || null,
+                dispatchThrough || null,
                 ewayBillNo || null
             ]);
             const invoice = invoiceRes.rows[0];

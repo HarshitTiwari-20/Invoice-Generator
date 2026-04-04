@@ -9,10 +9,13 @@ export default function EditInvoicePage() {
     const id = params.id as string;
 
     const [invoiceNumber, setInvoiceNumber] = useState('');
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [customerName, setCustomerName] = useState('');
     const [motorVehicleNo, setMotorVehicleNo] = useState('');
     const [dispatchDocNo, setDispatchDocNo] = useState('');
     const [ewayBillNo, setEwayBillNo] = useState('');
+    const [destination, setDestination] = useState('');
+    const [dispatchThrough, setDispatchThrough] = useState('');
     const [consigneeDetails, setConsigneeDetails] = useState('');
     const [items, setItems] = useState([
         { productName: '', hsnSac: '', quantity: 1, totalPrice: 0 }
@@ -55,10 +58,15 @@ export default function EditInvoicePage() {
                 if (res.ok) {
                     const data = await res.json();
                     setInvoiceNumber(data.invoicenumber || '');
+                    if (data.date) {
+                        setDate(new Date(data.date).toISOString().split('T')[0]);
+                    }
                     setCustomerName(data.customername || '');
                     setMotorVehicleNo(data.motorvehicleno || '');
                     setDispatchDocNo(data.dispatchdocno || '');
                     setEwayBillNo(data.ewaybillno || '');
+                    setDestination(data.destination || '');
+                    setDispatchThrough(data.dispatchthrough || '');
                     setConsigneeDetails(data.consigneedetails || '');
                     
                     if (data.items && data.items.length > 0) {
@@ -109,7 +117,7 @@ export default function EditInvoicePage() {
             const res = await fetch(`/api/invoices/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ invoiceNumber, customerName, motorVehicleNo, dispatchDocNo, ewayBillNo, consigneeDetails, items }),
+                body: JSON.stringify({ invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, ewayBillNo, destination,dispatchThrough, consigneeDetails, items }),
             });
 
             if (res.ok) {
@@ -155,6 +163,35 @@ export default function EditInvoicePage() {
                             />
                         </div>
                         <div>
+                            <label className="block text-sm font-medium mb-1">Date</label>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    className="w-full glass-input p-3 rounded-lg transition"
+                                    value={date ? date.split('-').reverse().join('/') : ''}
+                                    readOnly
+                                    placeholder="dd/mm/yyyy"
+                                />
+                                <input
+                                    type="date"
+                                    className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    onClick={(e) => {
+                                        if ('showPicker' in e.target) {
+                                           // @ts-expect-error exists in modern browsers
+                                           e.target.showPicker();
+                                        }
+                                    }}
+                                    required
+                                />
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                                    <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" width="20" height="20" className="text-white opacity-80"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
                             <label className="block text-sm font-medium mb-1">Customer Name</label>
                             <input
                                 type="text"
@@ -193,6 +230,26 @@ export default function EditInvoicePage() {
                                 value={ewayBillNo}
                                 onChange={(e) => setEwayBillNo(e.target.value)}
                                 placeholder="Enter e-Way Bill No. (Optional)"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Destination</label>
+                            <input
+                                type="text"
+                                className="w-full glass-input p-3 rounded-lg transition"
+                                value={destination}
+                                onChange={(e) => setDestination(e.target.value)}
+                                placeholder="Enter destination"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Dispatch Through</label>
+                            <input
+                                type="text"
+                                className="w-full glass-input p-3 rounded-lg transition"
+                                value={dispatchThrough}
+                                onChange={(e) => setDispatchThrough(e.target.value)}
+                                placeholder="Enter dispatch through"
                             />
                         </div>
                         <div className="col-span-2 w-full">

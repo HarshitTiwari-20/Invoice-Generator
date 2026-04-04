@@ -7,6 +7,8 @@ export interface Invoice {
     dispatchdocno: string | null;
     consigneedetails: string | null;
     ewaybillno: string | null;
+    destination: string | null;
+    dispatchthrough: string | null;
     is_deleted: boolean;
 }
 

@@ -7,9 +7,12 @@ export default function CreateInvoicePage() {
     const router = useRouter();
     const [invoiceNumber, setInvoiceNumber] = useState('');
     const [customerName, setCustomerName] = useState('');
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [motorVehicleNo, setMotorVehicleNo] = useState('');
     const [dispatchDocNo, setDispatchDocNo] = useState('');
     const [ewayBillNo, setEwayBillNo] = useState('');
+    const [destination, setDestination] = useState('');
+    const [dispatchThrough, setDispatchThrough] = useState('');
     const [consigneeDetails, setConsigneeDetails] = useState('');
     const [items, setItems] = useState([
         { productName: '', hsnSac: '', quantity: 1, totalPrice: 0 }
@@ -67,7 +70,7 @@ export default function CreateInvoicePage() {
             const res = await fetch('/api/invoices', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ invoiceNumber, customerName, motorVehicleNo, dispatchDocNo, ewayBillNo, consigneeDetails, items }),
+                body: JSON.stringify({ invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, ewayBillNo, destination,dispatchThrough, consigneeDetails, items }),
             });
 
             if (res.ok) {
@@ -103,9 +106,36 @@ export default function CreateInvoicePage() {
                             />
                         </div>
                         <div>
+                            <label className="block text-2xl font-medium mb-1">Date</label>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    className="w-full glass-input p-3 rounded-lg transition"
+                                    value={date ? date.split('-').reverse().join('/') : ''}
+                                    readOnly
+                                    placeholder="dd/mm/yyyy"
+                                />
+                                <input
+                                    type="date"
+                                    className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    onClick={(e) => {
+                                        if ('showPicker' in e.target) {
+                                           // @ts-expect-error exists in modern browsers
+                                           e.target.showPicker();
+                                        }
+                                    }}
+                                    required
+                                />
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                                    <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" width="20" height="20" className="text-white opacity-80"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
                             <label className="block text-2xl font-medium mb-1">Customer Name</label>
-                            <input
-                                type="text"
+                            <textarea
                                 className="w-full glass-input p-3 rounded-lg transition"
                                 value={customerName}
                                 onChange={(e) => setCustomerName(e.target.value)}
@@ -125,8 +155,7 @@ export default function CreateInvoicePage() {
                         </div>
                         <div>
                             <label className="block text-2xl font-medium mb-1">Dispatch Doc No. </label>
-                            <input
-                                type="text"
+                            <textarea
                                 className="w-full glass-input p-3 rounded-lg transition"
                                 value={dispatchDocNo}
                                 onChange={(e) => setDispatchDocNo(e.target.value)}
@@ -141,6 +170,24 @@ export default function CreateInvoicePage() {
                                 value={ewayBillNo}
                                 onChange={(e) => setEwayBillNo(e.target.value)}
                                 placeholder="Enter e-Way Bill No. (Optional)"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-2xl font-medium mb-1">Destination</label>
+                            <textarea
+                                className="w-full glass-input p-3 rounded-lg transition"
+                                value={destination}
+                                onChange={(e) => setDestination(e.target.value)}
+                                placeholder="Enter destination"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-2xl font-medium mb-2">Dispatch Through</label>
+                            <textarea       
+                                className="w-full glass-input p-3 rounded-lg transition"
+                                value={dispatchThrough}
+                                onChange={(e) => setDispatchThrough(e.target.value)}
+                                placeholder="Enter dispatch through"
                             />
                         </div>
                         <div className="col-span-2">

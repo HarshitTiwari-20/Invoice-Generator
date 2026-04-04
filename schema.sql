@@ -9,6 +9,8 @@ CREATE TABLE invoices (
   motorVehicleNo VARCHAR(255),
   dispatchDocNo VARCHAR(255),
   consigneeDetails TEXT,
+  destination VARCHAR(255),
+  dispatchThrough VARCHAR(255),
   ewayBillNo TEXT,
   is_deleted BOOLEAN DEFAULT false
 );

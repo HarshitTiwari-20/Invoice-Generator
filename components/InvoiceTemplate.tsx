@@ -133,11 +133,11 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                         <div className="flex border-b border-[#000000]">
                             <div className="w-1/2 p-1 border-r border-[#000000]">
                                 <p>Dispatched through</p>
-                                <p className="font-bold">BY ROAD</p>
+                                <p className="font-bold">{invoice.dispatchthrough || ''}</p>
                             </div>
                             <div className="w-1/2 p-1">
                                 <p>Destination</p>
-                                <p className="font-bold">235/4, G T ROAD, NORTH, GHUSURI</p>
+                                <p className="font-bold">{invoice.destination || ''}</p>
                             </div>
                         </div>
                         <div className="flex border-b-2 border-[#000000]">
