@@ -145,7 +145,7 @@ export default function Home() {
           {/* Invoice Preview */}
           <div className="col-span-2 glass-card p-8 flex flex-col items-center justify-center rounded-2xl h-[240vh] w-auto overflow-auto relative">
             {selectedInvoice ? (
-              <div className="w-auto flex flex-col items-center lg:mt-250 mt-350 z-20 relative">
+              <div className="w-auto flex flex-col items-center lg:mt-250 mt-200  z-20 relative">
                 <div className="flex gap-4 mt-[400px]">
                   <button
                     onClick={() => handlePrint()}
