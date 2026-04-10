@@ -17,7 +17,7 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
     const roundOff = finalRoundedAmount - totalAmount;
 
     return (
-        <div style={{ fontFamily: 'Arial, Helvetica, sans-serif', letterSpacing: 'normal' }} className="invoice-page bg-[#ffffff] text-[#000000] text-[10px] w-[210mm] min-h-[297mm] mx-auto p-4 mb-8 border border-white">
+        <div style={{ fontFamily: 'Arial, Helvetica, sans-serif', letterSpacing: 'normal' }} className="invoice-page bg-[#ffffff] text-[#000000] text-[10px] w-[210mm] min-h-[297mm] mx-auto p-4 border border-white">
             {/* Title */}
             <div className="flex justify-between items-end mb-1 px-2">
                 <div className="w-1/3"></div>

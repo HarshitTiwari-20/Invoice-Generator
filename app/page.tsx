@@ -41,21 +41,25 @@ export default function Home() {
           scale: 2,
           useCORS: true,
           logging: false,
-          windowWidth: pageNode.scrollWidth,
-          windowHeight: pageNode.scrollHeight,
         });
 
         const imgData = canvas.toDataURL('image/png');
         const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
         const imgWidth = canvas.width;
         const imgHeight = canvas.height;
-        const ratio = pdfWidth / imgWidth;
+        
+        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+        
+        const imgWidthInPdf = imgWidth * ratio;
         const imgHeightInPdf = imgHeight * ratio;
+        
+        const xOffset = (pdfWidth - imgWidthInPdf) / 2;
 
         if (i > 0) {
           pdf.addPage();
         }
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeightInPdf);
+        pdf.addImage(imgData, 'PNG', xOffset, 0, imgWidthInPdf, imgHeightInPdf);
       }
 
       pdf.save(`invoice_${selectedInvoice?.invoicenumber || 'download'}.pdf`);
