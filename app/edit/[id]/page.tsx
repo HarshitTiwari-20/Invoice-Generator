@@ -17,6 +17,7 @@ export default function EditInvoicePage() {
     const [destination, setDestination] = useState('');
     const [dispatchThrough, setDispatchThrough] = useState('');
     const [consigneeDetails, setConsigneeDetails] = useState('');
+    const [buyerDetails, setBuyerDetails] = useState('');
     const [items, setItems] = useState([
         { productName: '', hsnSac: '', quantity: 1, totalPrice: 0 }
     ]);
@@ -35,6 +36,12 @@ export default function EditInvoicePage() {
                             setConsigneeDetails((prev) => {
                                 if (!prev || prev === lastAutoFilled) {
                                     setLastAutoFilled(data.consigneeDetails);
+                                    return data.consigneeDetails;
+                                }
+                                return prev;
+                            });
+                            setBuyerDetails((prev) => {
+                                if (!prev || prev === lastAutoFilled) {
                                     return data.consigneeDetails;
                                 }
                                 return prev;
@@ -68,6 +75,7 @@ export default function EditInvoicePage() {
                     setDestination(data.destination || '');
                     setDispatchThrough(data.dispatchthrough || '');
                     setConsigneeDetails(data.consigneedetails || '');
+                    setBuyerDetails(data.buyerdetails || '');
                     
                     if (data.items && data.items.length > 0) {
                         setItems(data.items.map((i: { productname: string; hsnsac: string; quantity: number; totalprice: number }) => ({
@@ -117,7 +125,7 @@ export default function EditInvoicePage() {
             const res = await fetch(`/api/invoices/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, ewayBillNo, destination,dispatchThrough, consigneeDetails, items }),
+                body: JSON.stringify({ invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, ewayBillNo, destination,dispatchThrough, consigneeDetails, buyerDetails, items }),
             });
 
             if (res.ok) {
@@ -193,8 +201,7 @@ export default function EditInvoicePage() {
                         
                         <div>
                             <label className="block text-sm font-medium mb-1">Customer Name</label>
-                            <input
-                                type="text"
+                            <textarea
                                 className="w-full glass-input p-3 rounded-lg transition"
                                 value={customerName}
                                 onChange={(e) => setCustomerName(e.target.value)}
@@ -214,8 +221,7 @@ export default function EditInvoicePage() {
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-1">Dispatch Doc No. </label>
-                            <input
-                                type="text"
+                            <textarea
                                 className="w-full glass-input p-3 rounded-lg transition"
                                 value={dispatchDocNo}
                                 onChange={(e) => setDispatchDocNo(e.target.value)}
@@ -234,8 +240,7 @@ export default function EditInvoicePage() {
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-1">Destination</label>
-                            <input
-                                type="text"
+                            <textarea
                                 className="w-full glass-input p-3 rounded-lg transition"
                                 value={destination}
                                 onChange={(e) => setDestination(e.target.value)}
@@ -244,21 +249,29 @@ export default function EditInvoicePage() {
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-1">Dispatch Through</label>
-                            <input
-                                type="text"
+                            <textarea
                                 className="w-full glass-input p-3 rounded-lg transition"
                                 value={dispatchThrough}
                                 onChange={(e) => setDispatchThrough(e.target.value)}
                                 placeholder="Enter dispatch through"
                             />
                         </div>
-                        <div className="col-span-2 w-full">
+                        <div className="col-span-2 md:col-span-1 border border-white/20 p-2 rounded-xl">
                             <label className="block text-sm font-medium mb-1">Consignee Details (Ship To)</label>
                             <textarea
                                 className="w-full glass-input p-3 rounded-lg h-32 transition"
                                 value={consigneeDetails}
                                 onChange={(e) => setConsigneeDetails(e.target.value)}
-                                placeholder={`e.g.\n235/4, G T ROAD, NORTH, GHUSURI, Howrah,\nWest Bengal, 711107\nGSTIN/UIN : 19ALRPS1105Q1ZD\nState Name : West Bengal, Code : 19`}
+                                placeholder={`e.g.\n235/4, G T ROAD, NORTH, GHUSURI, Howrah,\nWest Bengal, 711107...`}
+                            />
+                        </div>
+                        <div className="col-span-2 md:col-span-1 border border-white/20 p-2 rounded-xl">
+                            <label className="block text-sm font-medium mb-1">Buyer Details (Bill To)</label>
+                            <textarea
+                                className="w-full glass-input p-3 rounded-lg h-32 transition"
+                                value={buyerDetails}
+                                onChange={(e) => setBuyerDetails(e.target.value)}
+                                placeholder={`e.g.\n235/4, G T ROAD, NORTH, GHUSURI, Howrah,\nWest Bengal, 711107...`}
                             />
                         </div>
                     </div>

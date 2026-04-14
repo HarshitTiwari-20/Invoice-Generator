@@ -14,6 +14,7 @@ export default function CreateInvoicePage() {
     const [destination, setDestination] = useState('');
     const [dispatchThrough, setDispatchThrough] = useState('');
     const [consigneeDetails, setConsigneeDetails] = useState('');
+    const [buyerDetails, setBuyerDetails] = useState('');
     const [items, setItems] = useState([
         { productName: '', hsnSac: '', quantity: 1, totalPrice: 0 }
     ]);
@@ -31,6 +32,12 @@ export default function CreateInvoicePage() {
                             setConsigneeDetails((prev) => {
                                 if (!prev || prev === lastAutoFilled) {
                                     setLastAutoFilled(data.consigneeDetails);
+                                    return data.consigneeDetails;
+                                }
+                                return prev;
+                            });
+                            setBuyerDetails((prev) => {
+                                if (!prev || prev === lastAutoFilled) {
                                     return data.consigneeDetails;
                                 }
                                 return prev;
@@ -70,7 +77,7 @@ export default function CreateInvoicePage() {
             const res = await fetch('/api/invoices', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, ewayBillNo, destination,dispatchThrough, consigneeDetails, items }),
+                body: JSON.stringify({ invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, ewayBillNo, destination,dispatchThrough, consigneeDetails, buyerDetails, items }),
             });
 
             if (res.ok) {
@@ -190,13 +197,22 @@ export default function CreateInvoicePage() {
                                 placeholder="Enter dispatch through"
                             />
                         </div>
-                        <div className="col-span-2">
+                        <div className="col-span-2 md:col-span-1">
                             <label className="block text-2xl font-medium mb-2">Consignee Details (Ship To)</label>
                             <textarea
                                 className="w-full glass-input p-3 rounded-lg h-50 transition"
                                 value={consigneeDetails}
                                 onChange={(e) => setConsigneeDetails(e.target.value)}
-                                placeholder={`e.g.\n235/4, G T ROAD, NORTH, GHUSURI, Howrah,\nWest Bengal, 711107\nGSTIN/UIN : 19ALRPS1105Q1ZD\nState Name : West Bengal, Code : 19`}
+                                placeholder={`e.g.\n235/4, G T ROAD, NORTH, GHUSURI, Howrah,\nWest Bengal, 711107...`}
+                            />
+                        </div>
+                        <div className="col-span-2 md:col-span-1">
+                            <label className="block text-2xl font-medium mb-2">Buyer Details (Bill To)</label>
+                            <textarea
+                                className="w-full glass-input p-3 rounded-lg h-50 transition"
+                                value={buyerDetails}
+                                onChange={(e) => setBuyerDetails(e.target.value)}
+                                placeholder={`e.g.\n235/4, G T ROAD, NORTH, GHUSURI, Howrah,\nWest Bengal, 711107...`}
                             />
                         </div>
                     </div>

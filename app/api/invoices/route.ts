@@ -17,6 +17,7 @@ interface CreateInvoiceRequest {
     motorVehicleNo?: string;
     dispatchDocNo?: string;
     consigneeDetails?: string;
+    buyerDetails?: string;
     destination?: string;
     dispatchThrough?: string;
     ewayBillNo?: string;
@@ -26,7 +27,7 @@ interface CreateInvoiceRequest {
 export async function POST(req: NextRequest) {
     try {
         const body: CreateInvoiceRequest = await req.json();
-        const { invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, destination, dispatchThrough, ewayBillNo, items } = body;
+        const { invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, buyerDetails, destination, dispatchThrough, ewayBillNo, items } = body;
 
         if (!invoiceNumber) {
             return NextResponse.json({ error: 'Invoice number is required' }, { status: 400 });
@@ -48,9 +49,9 @@ export async function POST(req: NextRequest) {
             const invoiceDate = date ? new Date(date) : new Date();
 
             const insertInvoiceText = `
-                INSERT INTO invoices (invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, destination,dispatchThrough, ewayBillNo, is_deleted)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, false)
-                RETURNING id, invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, destination, dispatchThrough, ewayBillNo, is_deleted
+                INSERT INTO invoices (invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, buyerDetails, destination,dispatchThrough, ewayBillNo, is_deleted)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, false)
+                RETURNING id, invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, buyerDetails, destination, dispatchThrough, ewayBillNo, is_deleted
             `;
             const invoiceRes = await client.query(insertInvoiceText, [
                 invoiceNumber,
@@ -59,6 +60,7 @@ export async function POST(req: NextRequest) {
                 motorVehicleNo || null,
                 dispatchDocNo || null,
                 consigneeDetails || null,
+                buyerDetails || null,
                 destination || null,
                 dispatchThrough || null,
                 ewayBillNo || null

@@ -147,42 +147,48 @@ export default function Home() {
           </div>
 
           {/* Invoice Preview */}
-          <div className="col-span-2 glass-card p-8 flex flex-col items-center justify-center rounded-2xl h-[240vh] w-auto overflow-auto relative">
+          <div className="md:col-span-2 col-span-1 glass-card flex flex-col items-center rounded-2xl h-[80vh] overflow-hidden relative border border-white/5">
             {selectedInvoice ? (
-              <div className="w-auto flex flex-col items-center lg:mt-250 mt-350 z-20 relative">
-                <div className="flex gap-4 mt-[400px]">
+              <div className="w-full h-full flex flex-col relative">
+                {/* Fixed Header with Controls */}
+                <div className="sticky top-0 z-30 w-full flex flex-wrap justify-center gap-2 md:gap-4 p-4 bg-black/50 backdrop-blur-md border-b border-white/10 shadow-lg">
                   <button
                     onClick={() => handlePrint()}
-                    className="bg-white/10 border border-white/20 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-white/20 backdrop-blur-sm transition"
+                    className="bg-white/10 border border-white/20 text-white px-4 md:px-6 py-2 rounded-lg shadow-lg hover:bg-white/20 transition font-medium text-sm md:text-base"
                   >
                     Print
                   </button>
                   <button
                     onClick={handleDownloadPdf}
-                    className="bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700"
+                    className="bg-blue-600 text-white px-4 md:px-6 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition font-medium text-sm md:text-base"
                   >
                     Download PDF
                   </button>
                   <Link
                     href={`/edit/${selectedInvoice.id}`}
-                    className="bg-yellow-500 text-white px-6 py-2 rounded shadow hover:bg-yellow-600"
+                    className="bg-yellow-500 text-white px-4 md:px-6 py-2 rounded-lg shadow-lg hover:bg-yellow-600 transition font-medium flex items-center justify-center text-sm md:text-base"
                   >
                     Edit
                   </Link>
                   <button
                     onClick={() => handleDelete(selectedInvoice.id)}
-                    className="bg-red-500/80 border border-red-500/50 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-red-600/80 backdrop-blur-sm transition"
+                    className="bg-red-500 border border-red-500/50 text-white px-4 md:px-6 py-2 rounded-lg shadow-lg hover:bg-red-600 transition font-medium text-sm md:text-base"
                   >
                     Delete
                   </button>
                 </div>
-                <div className="scale-125 origin-top shadow-2xl rounded mt-8">
-                  {/* Render the template for viewing */}
-                  <InvoiceTemplate ref={printRef} invoice={selectedInvoice} />
+                
+                {/* Scrollable invoice area */}
+                <div className="flex-1 overflow-auto custom-scrollbar w-full bg-black/20">
+                  <div className="w-full min-w-fit flex justify-center p-4 md:p-8">
+                    <div className="shadow-2xl shadow-black/50 rounded-sm">
+                      <InvoiceTemplate ref={printRef} invoice={selectedInvoice} />
+                    </div>
+                  </div>
                 </div>
               </div>
             ) : (
-              <div className="text-white/70 text-lg flex items-center justify-center h-full">Select an invoice to preview</div>
+              <div className="text-white/70 text-lg flex items-center justify-center h-full w-full">Select an invoice to preview</div>
             )}
           </div>
         </div>

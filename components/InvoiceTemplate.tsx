@@ -45,34 +45,34 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                             <p>E-Mail : sailendarsingh794@gmail.com</p>
                         </div>
                         <div className="border-t-2 border-[#000000] p-1 flex-1">
-                            <p>Consignee (Ship to)</p>
-                            <h2 className="font-bold text-sm">{invoice.customername}</h2>
+                            <p className="leading-tight mb-[2px]">Consignee(Ship to)</p>
+                            <h2 className="font-bold text-sm leading-none mb-1">{invoice.customername}</h2>
                             {invoice.consigneedetails ? (
                                 invoice.consigneedetails.split('\n').map((line, idx) => (
-                                    <p key={idx}>{line}</p>
+                                    <p key={idx} className="leading-tight break-words whitespace-pre-wrap">{line}</p>
                                 ))
                             ) : (
                                 <>
-                                    <p>235/4, G T ROAD, NORTH, GHUSURI, Howrah,</p>
-                                    <p>West Bengal, 711107</p>
-                                    <p>GSTIN/UIN : 19ALRPS1105Q1ZD</p>
-                                    <p>State Name : West Bengal, Code : 19</p>
+                                    <p className="leading-tight">235/4, G T ROAD, NORTH, GHUSURI, Howrah,</p>
+                                    <p className="leading-tight">West Bengal, 711107</p>
+                                    <p className="leading-tight">GSTIN/UIN : 19ALRPS1105Q1ZD</p>
+                                    <p className="leading-tight">State Name : West Bengal, Code : 19</p>
                                 </>
                             )}
                         </div>
                         <div className="border-t-2 border-[#000000] p-1 flex-1">
-                            <p>Buyer (Bill to)</p>
-                            <h2 className="font-bold text-sm">{invoice.customername}</h2>
-                            {invoice.consigneedetails ? (
-                                invoice.consigneedetails.split('\n').map((line, idx) => (
-                                    <p key={idx}>{line}</p>
+                            <p className="leading-tight mb-[2px]">Buyer (Bill to)</p>
+                            <h2 className="font-bold text-sm leading-none mb-1">{invoice.customername}</h2>
+                            {(invoice.buyerdetails || invoice.consigneedetails) ? (
+                                (invoice.buyerdetails || invoice.consigneedetails)!.split('\n').map((line, idx) => (
+                                    <p key={idx} className="leading-tight break-words whitespace-pre-wrap">{line}</p>
                                 ))
                             ) : (
                                 <>
-                                    <p>235/4, G T ROAD, NORTH, GHUSURI, Howrah,</p>
-                                    <p>West Bengal, 711107</p>
-                                    <p>GSTIN/UIN : 19ALRPS1105Q1ZD</p>
-                                    <p>State Name : West Bengal, Code : 19</p>
+                                    <p className="leading-tight">235/4, G T ROAD, NORTH, GHUSURI, Howrah,</p>
+                                    <p className="leading-tight">West Bengal, 711107</p>
+                                    <p className="leading-tight">GSTIN/UIN : 19ALRPS1105Q1ZD</p>
+                                    <p className="leading-tight">State Name : West Bengal, Code : 19</p>
                                 </>
                             )}
                         </div>
@@ -159,13 +159,13 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
                 <table className="w-full border-collapse">
                     <thead>
                         <tr className="border-b-2 border-[#000000]">
-                            <th className="border-r border-[#000000] p-[2px] w-6 font-normal">Sl<br />No.</th>
-                            <th className="border-r border-[#000000] p-1 font-normal">Description of Goods</th>
-                            <th className="border-r border-[#000000] p-1 w-16 font-normal">HSN/SAC</th>
-                            <th className="border-r border-[#000000] p-1 w-20 font-normal">Quantity</th>
-                            <th className="border-r border-[#000000] p-1 w-12 font-normal">Rate</th>
-                            <th className="border-r border-[#000000] p-1 w-8 font-normal">per</th>
-                            <th className="p-1 w-24 font-normal">Amount</th>
+                            <th className="border-r border-[#000000] p-1 w-8 font-normal leading-tight">Sl<br />No.</th>
+                            <th className="border-r border-[#000000] p-1 font-normal leading-tight">Description of Goods</th>
+                            <th className="border-r border-[#000000] p-1 w-16 font-normal leading-tight">HSN/SAC</th>
+                            <th className="border-r border-[#000000] p-1 w-20 font-normal leading-tight">Quantity</th>
+                            <th className="border-r border-[#000000] p-1 w-12 font-normal leading-tight">Rate</th>
+                            <th className="border-r border-[#000000] p-1 w-8 font-normal leading-tight">per</th>
+                            <th className="p-1 w-24 font-normal leading-tight">Amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -219,20 +219,20 @@ const SingleInvoice = ({ invoice, copyType }: { invoice: InvoiceWithItems, copyT
 
                 {/* Tax Breakdown */}
                 <div className="border-b-2 border-[#000000]">
-                    <table className="w-full text-center">
+                    <table className="w-full text-center border-collapse">
                         <thead>
-                            <tr className="border-b border-[#000000]">
-                                <th rowSpan={2} className="border-r border-[#000000] font-normal">HSN/SAC</th>
-                                <th rowSpan={2} className="border-r border-[#000000] font-normal">Taxable<br />Value</th>
-                                <th colSpan={2} className="border-r border-[#000000] border-b font-normal">CGST</th>
-                                <th colSpan={2} className="border-r border-[#000000] border-b font-normal">SGST/UTGST</th>
-                                <th rowSpan={2} className="font-normal">Total<br />Tax Amount</th>
+                            <tr>
+                                <th rowSpan={2} className="border-r border-b border-[#000000] font-normal p-1 leading-tight">HSN/SAC</th>
+                                <th rowSpan={2} className="border-r border-b border-[#000000] font-normal p-1 leading-tight">Taxable<br />Value</th>
+                                <th colSpan={2} className="border-r border-b border-[#000000] font-normal p-1 leading-tight">CGST</th>
+                                <th colSpan={2} className="border-r border-b border-[#000000] font-normal p-1 leading-tight">SGST/UTGST</th>
+                                <th rowSpan={2} className="border-b border-[#000000] font-normal p-1 leading-tight">Total<br />Tax Amount</th>
                             </tr>
-                            <tr className="border-b border-[#000000]">
-                                <th className="border-r border-[#000000] font-normal w-12">Rate</th>
-                                <th className="border-r border-[#000000] font-normal">Amount</th>
-                                <th className="border-r border-[#000000] font-normal w-12">Rate</th>
-                                <th className="border-r border-[#000000] font-normal">Amount</th>
+                            <tr>
+                                <th className="border-r border-b border-[#000000] font-normal w-12 p-1 leading-tight">Rate</th>
+                                <th className="border-r border-b border-[#000000] font-normal p-1 leading-tight">Amount</th>
+                                <th className="border-r border-b border-[#000000] font-normal w-12 p-1 leading-tight">Rate</th>
+                                <th className="border-r border-b border-[#000000] font-normal p-1 leading-tight">Amount</th>
                             </tr>
                         </thead>
                         <tbody>

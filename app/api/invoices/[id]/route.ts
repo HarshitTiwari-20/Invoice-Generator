@@ -58,7 +58,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         if (!id) return NextResponse.json({ error: 'Invoice ID is required' }, { status: 400 });
 
         const body = await req.json();
-        const { invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, destination,dispatchThrough, ewayBillNo, items } = body;
+        const { invoiceNumber, date, customerName, motorVehicleNo, dispatchDocNo, consigneeDetails, buyerDetails, destination,dispatchThrough, ewayBillNo, items } = body;
 
         const GST_RATE = 0.18;
         const client = await pool.connect();
@@ -69,15 +69,15 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
             const updateInvoiceText = `
                 UPDATE invoices 
                 SET invoiceNumber = $1, date = $2, customerName = $3, motorVehicleNo = $4, 
-                    dispatchDocNo = $5, consigneeDetails = $6, destination = $7, dispatchThrough = $8,ewayBillNo = $9
-                WHERE id = $10 AND (is_deleted = false OR is_deleted IS NULL)
+                    dispatchDocNo = $5, consigneeDetails = $6, buyerDetails = $7, destination = $8, dispatchThrough = $9,ewayBillNo = $10
+                WHERE id = $11 AND (is_deleted = false OR is_deleted IS NULL)
                 RETURNING *
             `;
             const invoiceDate = date ? new Date(date) : new Date();
 
             const invoiceRes = await client.query(updateInvoiceText, [
                 invoiceNumber, invoiceDate, customerName || 'Cash Customer', motorVehicleNo || null,
-                dispatchDocNo || null, consigneeDetails || null, destination || null,dispatchThrough || null, ewayBillNo || null, id
+                dispatchDocNo || null, consigneeDetails || null, buyerDetails || null, destination || null,dispatchThrough || null, ewayBillNo || null, id
             ]);
 
             if (invoiceRes.rows.length === 0) {

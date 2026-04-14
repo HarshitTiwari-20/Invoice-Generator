@@ -8,7 +8,7 @@ async function fix() {
   console.log("Adding hsnsac to invoice_items...");
   await c.query('ALTER TABLE invoice_items ADD COLUMN IF NOT EXISTS hsnsac VARCHAR(255);');
   console.log("Adding features to invoices...");
-  await c.query('ALTER TABLE invoices ADD COLUMN IF NOT EXISTS consigneeDetails TEXT, ADD COLUMN IF NOT EXISTS is_deleted BOOLEAN DEFAULT false;');
+  await c.query('ALTER TABLE invoices ADD COLUMN IF NOT EXISTS consigneeDetails TEXT, ADD COLUMN IF NOT EXISTS buyerDetails TEXT, ADD COLUMN IF NOT EXISTS is_deleted BOOLEAN DEFAULT false;');
   console.log("Adding eway to invoices...");
   await c.query('ALTER TABLE invoices ADD COLUMN IF NOT EXISTS ewayBillNo TEXT;');
   

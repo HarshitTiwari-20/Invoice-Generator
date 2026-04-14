@@ -6,6 +6,7 @@ export interface Invoice {
     motorvehicleno: string | null;
     dispatchdocno: string | null;
     consigneedetails: string | null;
+    buyerdetails: string | null;
     ewaybillno: string | null;
     destination: string | null;
     dispatchthrough: string | null;
